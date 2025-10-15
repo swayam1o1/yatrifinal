@@ -1,0 +1,180 @@
+/* Container for main content (.container) */
+.container {
+  max-width: 480px;
+  margin: auto;
+  padding: 16px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border-radius: 8px;
+}
+
+/* Page title (h1) */
+h1 {
+  font-size: 1.7rem;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #222;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  letter-spacing: 0.5px;
+}
+
+/* AR model viewer placeholder (.model-viewer) */
+.model-viewer {
+  width: 100%;
+  height: 240px;
+  background: #222;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  font-size: 1.15rem;
+  color: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+/* Touch-friendly large buttons (all <button> elements) */
+button, .container a button {
+  width: 100%;
+  padding: 16px 0;
+  margin: 10px 0;
+  font-size: 1.15rem;
+  border-radius: 8px;
+  border: none;
+  background: #007bff;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+button:active, button:focus {
+  background: #0056b3;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+}
+
+/* High contrast for rural readability */
+body {
+  background: #f8f9fa;
+  color: #222;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 1rem;
+}
+
+/* Dropdown for site selection (<select>) */
+select {
+  width: 100%;
+  padding: 14px;
+  margin: 10px 0;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  border: 1.5px solid #007bff;
+  background: #f5f5f5;
+  color: #222;
+}
+
+/* Info section for subtitles/text box (.info-section) */
+.info-section {
+  margin-top: 22px;
+  padding: 14px;
+  background: #f1f3f6;
+  border-radius: 8px;
+  font-size: 1.08rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+/* Language tabs for subtitles (.lang-tabs, .lang-tab) */
+.lang-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.lang-tab {
+  flex: 1;
+  padding: 8px 0;
+  background: #e0e0e0;
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #222;
+  font-weight: 500;
+  border: 1.5px solid #ccc;
+  transition: background 0.2s, color 0.2s;
+}
+.lang-tab.active {
+  background: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+/* Subtitles / text box for multiple languages (#infoText) */
+#infoText {
+  min-height: 48px;
+  padding: 8px;
+  background: #fff;
+  border-radius: 6px;
+  color: #222;
+  font-size: 1.08rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+/* Background music control button style (#playMusicBtn) */
+#playMusicBtn {
+  background: linear-gradient(90deg, #ff9800 60%, #ffc107 100%);
+  color: #222;
+  font-weight: 700;
+  border: none;
+  box-shadow: 0 2px 8px rgba(255,152,0,0.12);
+}
+#playMusicBtn:active, #playMusicBtn:focus {
+  background: linear-gradient(90deg, #ff9800 80%, #ffc107 100%);
+  color: #fff;
+}
+
+/* AR fullscreen view overlay (#arFullView) */
+#arFullView {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: #000;
+  z-index: 9999;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Back button in AR view (#backBtn) */
+#backBtn {
+  position: absolute;
+  top: 18px; left: 18px;
+  background: #fff;
+  color: #007bff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 22px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+#backBtn:active, #backBtn:focus {
+  background: #007bff;
+  color: #fff;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 480px) {
+  .container { padding: 8px; }
+  .model-viewer { height: 160px; }
+  h1 { font-size: 1.2rem; }
+  button, .container a button { font-size: 1rem; padding: 12px 0; }
+  select { font-size: 1rem; padding: 10px; }
+  .info-section { font-size: 1rem; padding: 8px; }
+  .lang-tab { font-size: 0.95rem; padding: 6px 0; }
+  #backBtn { font-size: 1rem; padding: 10px 16px; }
+}

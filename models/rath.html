@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rath AR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="../css/mobile-ar.css">
+  <!-- Model Viewer Library -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+</head>
+<body>
+  <div class="container" style="max-width:480px;margin:auto;padding:16px;">
+    <h1 style="font-size:1.5rem;text-align:center;">Rath AR</h1>
+    <div class="model-desc" style="margin-bottom:12px;">Rath is a ceremonial chariot used in processions. Experience its AR model below.</div>
+    <model-viewer id="arModelViewer"
+      src="https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/sign/heritage_assets/rath_nobg.glb?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV82NzUzYzI4Yi05MzU1LTQyOTgtYTY0NS0zZDRlMzE4NTU2MGUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJoZXJpdGFnZV9hc3NldHMvcmF0aF9ub2JnLmdsYiIsImlhdCI6MTc1ODU1MzMwOCwiZXhwIjoxNzkwMDg5MzA4fQ.N71GwFU9kbg8gmeaJ1a-4yuNiC1C-mTeeWufXcohUz0"
+      alt="Rath AR Model"
+      camera-controls auto-rotate ar
+      ar-modes="webxr scene-viewer quick-look"
+      ios-src="https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/sign/heritage_assets/rath_nobg.glb?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV82NzUzYzI4Yi05MzU1LTQyOTgtYTY0NS0zZDRlMzE4NTU2MGUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJoZXJpdGFnZV9hc3NldHMvcmF0aF9ub2JnLmdsYiIsImlhdCI6MTc1ODU1MzMwOCwiZXhwIjoxNzkwMDg5MzA4fQ.N71GwFU9kbg8gmeaJ1a-4yuNiC1C-mTeeWufXcohUz0"
+      style="width:100%;height:60vh;max-width:100vw;background:transparent;"
+      draco-decoder-path="https://www.gstatic.com/draco/versioned/decoders/1.4.3/">
+    </model-viewer>
+    <a href="#" id="arLaunchLink" style="text-decoration:none;"><button style="width:100%;margin-top:16px;">Launch AR Experience</button></a>
+    <button onclick="window.location.href='../index.html'" style="width:100%;margin-top:16px;">← Back to Menu</button>
+  </div>
+  <script>
+    document.getElementById('arLaunchLink').onclick = function(e) {
+      e.preventDefault();
+      const viewer = document.getElementById('arModelViewer');
+      if (viewer && viewer.activateAR) {
+        try {
+          viewer.activateAR();
+        } catch (err) {
+          alert('AR launch failed or not supported on this device/browser. Please ensure camera permissions are enabled and your browser supports AR.');
+        }
+      } else {
+        alert('AR not supported on this device/browser.');
+      }
+    };
+  </script>
+</body>
+</html>

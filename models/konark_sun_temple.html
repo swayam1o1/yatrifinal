@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Konark Sun Temple AR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="../css/mobile-ar.css">
+  <style>
+    model-viewer::part(hotspot) { background: none !important; border: none !important; box-shadow: none !important; }
+    .hotspot { width: 24px; height: 24px; border-radius: 50%; background: rgba(255, 180, 40, 0.848); border: 2px solid white; cursor: pointer; transition: opacity 0.2s, box-shadow 0.2s; box-shadow: 0 0 8px rgba(0,0,0,0.15); }
+    .hotspot.selected { background: rgb(255, 183, 0) !important; border-color: rgb(255, 255, 255); box-shadow: 0 0 16px 4px rgb(255, 145, 0); }
+  </style>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+</head>
+<body>
+  <div class="container" style="max-width:480px;margin:auto;padding:16px;">
+    <h1 style="font-size:1.5rem;text-align:center;">Konark Sun Temple AR</h1>
+    <div class="model-desc" style="margin-bottom:12px;">Konark Sun Temple is a UNESCO World Heritage Site in Odisha, India. Explore its AR model below.</div>
+    <model-viewer id="arModelViewer"
+      alt="Konark Sun Temple AR Model: 3D view of the Sun Temple, Odisha, India."
+      camera-controls auto-rotate
+      style="width:100%;height:60vh;max-width:100vw;background:transparent;"
+      draco-decoder-path="https://www.gstatic.com/draco/versioned/decoders/1.4.3/">
+      <!-- Hotspots will be injected by JS -->
+    </model-viewer>
+    <ul class="hotspot-list" id="hotspotList"></ul>
+    <button id="toggleHotspots" style="width:100%;margin:8px 0 8px 0;">Toggle Hotspots</button>
+    <!-- Bottom Banner for Storytelling -->
+    <div id="storyBanner" class="story-banner" style="display:none;">
+      <button id="bannerClose" class="banner-exit" aria-label="Close">×</button>
+      <div class="banner-content">
+        <div class="banner-thumb-wrap">
+          <img id="bannerThumb" class="banner-thumb" src="" alt="Hotspot thumbnail" tabindex="0"/>
+        </div>
+        <div class="banner-info">
+          <div id="bannerTitle" class="banner-title"></div>
+          <div id="bannerFact" class="banner-fact"></div>
+          <div class="audio-controls">
+            <button id="audioPlayPause" aria-label="Play/Pause">▶️</button>
+            <input id="audioSeek" type="range" min="0" max="100" value="0" step="1" style="width:60%;vertical-align:middle;"/>
+            <button id="audioMute" aria-label="Mute">🔊</button>
+            <input id="audioVolume" type="range" min="0" max="1" value="1" step="0.01" style="width:20%;vertical-align:middle;"/>
+          </div>
+          <div id="bannerSubtitles" class="banner-subtitles"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Fullscreen Thumbnail Modal -->
+    <div id="thumbModal" class="thumb-modal" style="display:none;">
+      <div class="thumb-modal-bg"></div>
+      <img id="thumbModalImg" class="thumb-modal-img" src="" alt="Hotspot image fullscreen"/>
+      <button id="thumbModalClose" class="thumb-modal-exit" aria-label="Close">×</button>
+    </div>
+    <a href="#" id="arLaunchLink" style="text-decoration:none;"><button style="width:100%;margin-top:16px;">Launch AR Experience</button></a>
+    <button onclick="window.location.href='../index.html'" style="width:100%;margin-top:16px;">← Back to Menu</button>
+  </div>
+  <script>
+    // --- AR Launch Logic ---
+    function isIOS() { return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream; }
+    function isAndroidChrome() { return /Android/.test(navigator.userAgent) && /Chrome\//.test(navigator.userAgent); }
+    function supportsSceneViewer() { return isAndroidChrome(); }
+    // Only USDZ available for Sun Temple
+    const GLB_URL = "";
+    const USDZ_URL = "https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/public/heritage_assets/konark_sun_temple.usdz";
+    document.getElementById('arLaunchLink').onclick = function(e) {
+      e.preventDefault();
+      const viewer = document.getElementById('arModelViewer');
+      document.querySelectorAll('model-viewer .hotspot').forEach(h => h.style.display = 'none');
+      if (isIOS()) {
+        alert('Tip: On iOS, you can pinch to zoom and rotate the model in AR.');
+        const a = document.createElement('a');
+        a.setAttribute('rel', 'ar');
+        a.setAttribute('href', USDZ_URL);
+        a.setAttribute('style', 'display:none;');
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(()=>{ document.querySelectorAll('model-viewer .hotspot').forEach(h => h.style.display = ''); }, 2000);
+        return;
+      }
+      if (supportsSceneViewer()) {
+        alert('3D model for Scene Viewer is not available for Sun Temple. Please use an iOS device for AR Quick Look.');
+        setTimeout(()=>{ document.querySelectorAll('model-viewer .hotspot').forEach(h => h.style.display = ''); }, 2000);
+        return;
+      }
+      alert('AR not supported for this monument on this device/browser. You can still interact with the 3D model below if available.');
+      setTimeout(()=>{ document.querySelectorAll('model-viewer .hotspot').forEach(h => h.style.display = ''); }, 2000);
+    };
+    // --- Storytelling Feature ---
+    // TODO: Add hotspots and storytelling data for this monument.
+    // Banner exit
+    document.getElementById('bannerClose').onclick = () => {
+      document.getElementById('storyBanner').style.transform = '';
+      setTimeout(()=>{ document.getElementById('storyBanner').style.display = 'none'; }, 200);
+    };
+    // Fullscreen modal exit
+    document.getElementById('thumbModalClose').onclick = () => { document.getElementById('thumbModal').style.display = 'none'; };
+    document.querySelector('.thumb-modal-bg').onclick = () => { document.getElementById('thumbModal').style.display = 'none'; };
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { document.getElementById('thumbModal').style.display = 'none'; } });
+    // Set model src on load (USDZ only)
+    document.getElementById('arModelViewer').setAttribute('ios-src', USDZ_URL);
+  </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Yatri AR - Model View</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="View heritage site in AR with surface detection and camera controls.">
+  <link rel="stylesheet" href="mobile-ar.css">
+  <!-- Model Viewer Library -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1 id="modelTitle">AR Model</h1>
+    <div class="model-desc" id="modelDesc">Model description will appear here.</div>
+    <model-viewer id="arModelViewer"
+      src=""
+      alt="AR Model"
+      camera-controls auto-rotate ar
+      ar-modes="webxr quick-look scene-viewer"
+      ios-src=""
+      style="width:100%;height:220px;background:transparent;"
+      draco-decoder-path="https://www.gstatic.com/draco/versioned/decoders/1.4.3/">
+    </model-viewer>
+    <a id="arLaunchLink" href="#" style="text-decoration:none;">
+      <button style="width:100%;margin-top:16px;">Launch AR Experience</button>
+    </a>
+    <button onclick="window.history.back()" style="width:100%;margin-top:16px;">← Back to Menu</button>
+  </div>
+  <script>
+    // Parse model key from URL (e.g., ?model=indiagate)
+    const params = new URLSearchParams(window.location.search);
+    const modelKey = params.get('model');
+    // Model data
+    const MODELS = {
+      indiagate: {
+        title: 'India Gate',
+        desc: 'India Gate is a war memorial located in New Delhi, India. Explore its AR model below.',
+        url: 'https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/sign/heritage_assets/india_gate_nobg.glb?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV82NzUzYzI4Yi05MzU1LTQyOTgtYTY0NS0zZDRlMzE4NTU2MGUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJoZXJpdGFnZV9hc3NldHMvaW5kaWFfZ2F0ZV9ub2JnLmdsYiIsImlhdCI6MTc1ODU1MzI2MiwiZXhwIjoxNzkwMDg5MjYyfQ.NLYlBfdsYKA7GAQlQc7eCmmk8VCeKoFj6JA7qLTyaM0'
+      },
+      pandal: {
+        title: 'Pandal',
+        desc: 'Pandal is a temporary structure used in festivals. View its AR model below.',
+        url: 'https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/sign/heritage_assets/pandal_without_bg.glb?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV82NzUzYzI4Yi05MzU1LTQyOTgtYTY0NS0zZDRlMzE4NTU2MGUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJoZXJpdGFnZV9hc3NldHMvcGFuZGFsX3dpdGhvdXRfYmcuZ2xiIiwiaWF0IjoxNzU4NTUzMjgzLCJleHAiOjE3OTAwODkyODN9.3PW38qEx9f3J-l5tByDWL-jWJ9sfgMcrgZnYzybDHko'
+      },
+      rath: {
+        title: 'Rath',
+        desc: 'Rath is a ceremonial chariot used in processions. Experience its AR model below.',
+        url: 'https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/sign/heritage_assets/rath_nobg.glb?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV82NzUzYzI4Yi05MzU1LTQyOTgtYTY0NS0zZDRlMzE4NTU2MGUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJoZXJpdGFnZV9hc3NldHMvcmF0aF9ub2JnLmdsYiIsImlhdCI6MTc1ODU1MzMwOCwiZXhwIjoxNzkwMDg5MzA4fQ.N71GwFU9kbg8gmeaJ1a-4yuNiC1C-mTeeWufXcohUz0'
+  },
+        charminar: {
+          title: 'Charminar',
+          desc: 'Charminar is a historic monument in Hyderabad, India. Explore its AR model below.',
+          url: 'https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/public/heritage_assets/charminar_hyderabad.glb',
+          iosUrl: 'https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/public/heritage_assets/Charminar_Hyderabad.usdz'
+        },
+        sanchi: {
+          title: 'Sanchi Stupa',
+          desc: 'The Great Stupa at Sanchi is one of the oldest stone structures in India. View its AR model below.',
+          url: 'https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/public/heritage_assets/great_stupa_in_sanchi.glb',
+          iosUrl: 'https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/public/heritage_assets/Great_Stupa_in_Sanchi.usdz'
+        },
+        suntemple: {
+          title: 'Sun Temple',
+          desc: 'Konark Sun Temple is a UNESCO World Heritage Site in Odisha, India. View its AR model below.',
+          url: '',
+          iosUrl: 'https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/public/heritage_assets/konark_sun_temple.usdz'
+        },
+    };
+    // Set model info
+    if (MODELS[modelKey]) {
+      document.getElementById('modelTitle').textContent = MODELS[modelKey].title + ' AR';
+      document.getElementById('modelDesc').textContent = MODELS[modelKey].desc;
+      document.getElementById('arModelViewer').setAttribute('src', MODELS[modelKey].url || '');
+      document.getElementById('arModelViewer').setAttribute('ios-src', MODELS[modelKey].iosUrl || MODELS[modelKey].url || '');
+      document.getElementById('arModelViewer').setAttribute('alt', MODELS[modelKey].title + ' AR Model');
+      document.getElementById('arLaunchLink').onclick = function(e) {
+        e.preventDefault();
+        document.getElementById('arModelViewer').activateAR();
+      };
+    } else {
+      document.getElementById('modelTitle').textContent = 'Model Not Found';
+      document.getElementById('modelDesc').textContent = 'No AR model available.';
+      document.getElementById('arModelViewer').style.display = 'none';
+      document.getElementById('arLaunchLink').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

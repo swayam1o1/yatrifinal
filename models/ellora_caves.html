@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ellora Caves AR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="../css/mobile-ar.css">
+  <style>
+    model-viewer::part(hotspot) { background: none !important; border: none !important; box-shadow: none !important; }
+    .hotspot { width: 24px; height: 24px; border-radius: 50%; background: rgba(255, 180, 40, 0.848); border: 2px solid white; cursor: pointer; transition: opacity 0.2s, box-shadow 0.2s; box-shadow: 0 0 8px rgba(0,0,0,0.15); }
+    .hotspot.selected { background: rgb(255, 183, 0) !important; border-color: rgb(255, 255, 255); box-shadow: 0 0 16px 4px rgb(255, 145, 0); }
+    .hotspot-list {
+      list-style: none;
+      padding: 8px;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100vw;
+      background: rgba(0,0,0,0.35);
+      z-index: 9999;
+      max-height: 40%;
+      overflow-y: auto;
+      pointer-events: auto;
+    }
+    .hotspot-list-item {
+      padding: 6px 12px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    .hotspot-list-item.selected {
+      background: rgb(255,183,0);
+      color: white;
+    }
+  </style>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+</head>
+<body>
+  <div class="container" style="max-width:480px;margin:auto;padding:16px;padding-bottom:80px;background:linear-gradient(135deg,#fffbe7 0%,#ffe082 100%);border-radius:24px;box-shadow:0 2px 16px #ffd60033;">
+  <h1 style="font-size:2rem;text-align:center;color:#7c5c00;font-family:'Georgia',serif;letter-spacing:1px;margin-bottom:8px;">Ellora Caves AR</h1>
+  <div class="model-desc" style="margin-bottom:12px;font-size:1.08rem;color:#7c5c00;font-family:'Georgia',serif;text-align:center;">Ellora Caves is a UNESCO World Heritage site in Maharashtra, India. Explore its AR model and stories below.</div>
+    <model-viewer id="arModelViewer"
+      src="https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/public/heritage_assets/ellora_caves__india.glb"
+      ios-src="https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/public/heritage_assets/Ellora_Caves__India.usdz"
+      alt="Ellora Caves AR Model: 3D view of the Ellora Caves, Maharashtra, India."
+      camera-controls auto-rotate
+      ar ar-modes="scene-viewer webxr quick-look"
+      style="width:100%;height:60vh;max-width:100vw;background:transparent;"
+      draco-decoder-path="https://www.gstatic.com/draco/versioned/decoders/1.4.3/">
+      <!-- Hotspots will be injected by JS -->
+    </model-viewer>
+  <ul class="hotspot-list" id="hotspotList" style="position:fixed;bottom:0;left:0;width:100vw;z-index:9999;background:rgba(0,0,0,0.35);max-height:40%;overflow-y:auto;pointer-events:auto;"></ul>
+    <button id="toggleHotspots" style="width:100%;margin:8px 0 8px 0;">Toggle Hotspots</button>
+    <!-- Bottom Banner for Storytelling -->
+    <div id="storyBanner" class="story-banner" style="display:none;">
+      <button id="bannerClose" class="banner-exit" aria-label="Close">×</button>
+      <div class="banner-content">
+        <div class="banner-thumb-wrap">
+          <img id="bannerThumb" class="banner-thumb" src="" alt="Hotspot thumbnail" tabindex="0"/>
+        </div>
+        <div class="banner-info">
+          <div id="bannerTitle" class="banner-title"></div>
+          <div id="bannerFact" class="banner-fact"></div>
+          <div class="audio-controls">
+            <button id="audioPlayPause" aria-label="Play/Pause">▶️</button>
+            <input id="audioSeek" type="range" min="0" max="100" value="0" step="1" style="width:60%;vertical-align:middle;"/>
+            <button id="audioMute" aria-label="Mute">🔊</button>
+            <input id="audioVolume" type="range" min="0" max="1" value="1" step="0.01" style="width:20%;vertical-align:middle;"/>
+          </div>
+          <div id="bannerSubtitles" class="banner-subtitles"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Fullscreen Thumbnail Modal -->
+    <div id="thumbModal" class="thumb-modal" style="display:none;">
+      <div class="thumb-modal-bg"></div>
+      <img id="thumbModalImg" class="thumb-modal-img" src="" alt="Hotspot image fullscreen"/>
+      <button id="thumbModalClose" class="thumb-modal-exit" aria-label="Close">×</button>
+    </div>
+    <a href="#" id="arLaunchLink" style="text-decoration:none;"><button style="width:100%;margin-top:16px;">Launch AR Experience</button></a>
+    <button onclick="window.location.href='../index.html'" style="width:100%;margin-top:16px;">← Back to Menu</button>
+  </div>
+  <script>
+    // --- AR Launch Logic ---
+    function isIOS() { return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream; }
+    function isAndroidChrome() { return /Android/.test(navigator.userAgent) && /Chrome\//.test(navigator.userAgent); }
+    function supportsSceneViewer() { return isAndroidChrome(); }
+    const GLB_URL = "https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/public/heritage_assets/ellora_caves__india.glb";
+    const USDZ_URL = "https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/public/heritage_assets/Ellora_Caves__India.usdz";
+    document.getElementById('arLaunchLink').onclick = function(e) {
+      e.preventDefault();
+      const viewer = document.getElementById('arModelViewer');
+      document.querySelectorAll('model-viewer .hotspot').forEach(h => h.style.display = 'none');
+      if (isIOS()) {
+        alert('Tip: On iOS, you can pinch to zoom and rotate the model in AR.');
+        const a = document.createElement('a');
+        a.setAttribute('rel', 'ar');
+        a.setAttribute('href', USDZ_URL);
+        a.setAttribute('style', 'display:none;');
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(()=>{ document.querySelectorAll('model-viewer .hotspot').forEach(h => h.style.display = ''); }, 2000);
+        return;
+      }
+      if (supportsSceneViewer()) {
+        // Android/Scene Viewer: use GLB
+        viewer.setAttribute('src', GLB_URL);
+        viewer.setAttribute('ar', '');
+        viewer.setAttribute('ar-modes', 'scene-viewer webxr');
+        const glbUrl = GLB_URL;
+        const title = encodeURIComponent('Ellora Caves AR');
+        const intentUrl = `intent://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(glbUrl)}&mode=ar_only&title=${title}&resizable=false#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${encodeURIComponent(window.location.href)};end;`;
+        window.location.href = intentUrl;
+        setTimeout(()=>{ document.querySelectorAll('model-viewer .hotspot').forEach(h => h.style.display = ''); }, 2000);
+        return;
+      }
+      alert('AR not supported for this monument on this device/browser. You can still interact with the 3D model below if available.');
+      setTimeout(()=>{ document.querySelectorAll('model-viewer .hotspot').forEach(h => h.style.display = ''); }, 2000);
+    };
+    // --- Hotspot Data & Placement ---
+    const HOTSPOT_JSON_URL = 'https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/sign/ellora/ellora.json?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV82NzUzYzI4Yi05MzU1LTQyOTgtYTY0NS0zZDRlMzE4NTU2MGUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJlbGxvcmEvZWxsb3JhLmpzb24iLCJpYXQiOjE3NTk3MTQ2MzUsImV4cCI6MTc5MTI1MDYzNX0.UFKXPqI85ErGCuJEJrmfNPTklX-Vwsad35fGhV_9pMI';
+    let hotspotData = null;
+    let currentAudio = null;
+    let selectedHotspot = null;
+    // Approximate 3D positions for Ellora Caves hotspots (tweak as needed)
+    const hotspotPositions = {
+  'kailasa_temple': { position: '0 1500 0', normal: '0 1 0' },
+  'buddhist_caves': { position: '-1500 450 0', normal: '-1 0 0' },
+  'hindu_caves': { position: '1500 450 0', normal: '1 0 0' },
+  'jain_caves': { position: '0 450 1500', normal: '0 0 -1' },
+  'art_and_symbolism': { position: '0 900 0', normal: '0 1 0' },
+  'grishneshwar_temple': { position: '0 0 -1500', normal: '0 0 1' },
+  'daulatabad_fort': { position: '-1500 0 -1500', normal: '-1 0 1' },
+  'ellora_waterfalls': { position: '1500 0 -1500', normal: '1 0 1' },
+  'ellora_heritage_centre': { position: '0 -450 1500', normal: '0 -1 -1' },
+  'light_and_sound_show': { position: '0 -450 -1500', normal: '0 -1 1' },
+  'local_cuisine': { position: '0 -900 0', normal: '0 -1 0' }
+    };
+    async function setupModelAndHotspots() {
+      try {
+        const res = await fetch(HOTSPOT_JSON_URL);
+        const data = await res.json();
+        hotspotData = data.hotspots;
+        console.log('Hotspot data loaded:', hotspotData);
+      } catch (err) {
+        console.error('Failed to load hotspot JSON:', err);
+        hotspotData = [];
+      }
+      const viewer = document.getElementById('arModelViewer');
+      viewer.setAttribute('ios-src', USDZ_URL);
+      // Place hotspots
+      hotspotData.forEach(h => {
+        if (!h.id) return;
+        const btn = document.createElement('button');
+        btn.className = 'hotspot';
+        btn.setAttribute('slot', 'hotspot-' + h.id);
+        btn.setAttribute('data-hotspot', h.id);
+        btn.setAttribute('aria-label', h.title);
+        let pos = hotspotPositions[h.id];
+        if (!pos) pos = { position: '0 0 0', normal: '0 1 0' };
+        btn.setAttribute('data-position', pos.position);
+        btn.setAttribute('data-normal', pos.normal);
+        btn.onclick = () => onHotspotClick(h.id);
+        btn.style.opacity = '1';
+        viewer.appendChild(btn);
+      });
+      // Hotspot toggle button
+      let hotspotsVisible = true;
+      document.getElementById('toggleHotspots').onclick = function() {
+        hotspotsVisible = !hotspotsVisible;
+        document.querySelectorAll('model-viewer .hotspot').forEach(btn => {
+          btn.style.display = hotspotsVisible ? '' : 'none';
+        });
+      };
+      // Add hotspot list
+      const list = document.getElementById('hotspotList');
+      list.innerHTML = '';
+      hotspotData.forEach(h => {
+        const li = document.createElement('li');
+        li.className = 'hotspot-list-item';
+        li.setAttribute('data-hotspot', h.id);
+        li.textContent = h.title;
+        li.onclick = () => onHotspotClick(h.id);
+        list.appendChild(li);
+      });
+    }
+    // Highlight logic
+    function highlightHotspot(key) {
+      document.querySelectorAll('.hotspot').forEach(btn => {
+        if (btn.dataset.hotspot === key) btn.classList.add('selected');
+        else btn.classList.remove('selected');
+      });
+      document.querySelectorAll('.hotspot-list-item').forEach(li => {
+        if (li.dataset.hotspot === key) li.classList.add('selected');
+        else li.classList.remove('selected');
+      });
+      selectedHotspot = key;
+    }
+    // Hotspot click handler
+    function onHotspotClick(hotspotId) {
+      highlightHotspot(hotspotId);
+      const h = hotspotData.find(hh => hh.id === hotspotId);
+      if (!h) return;
+      showBanner(h.title, h, 0, 1);
+    }
+    // Banner UI logic
+    function showBanner(title, slide, idx, totalSlides) {
+      document.getElementById('bannerTitle').textContent = title;
+      document.getElementById('bannerFact').textContent = slide.fact;
+      const thumb = document.getElementById('bannerThumb');
+      thumb.src = slide.image || '';
+      thumb.alt = title + ' thumbnail';
+      document.getElementById('bannerSubtitles').textContent = slide.subtitles || '';
+      document.getElementById('storyBanner').style.display = 'block';
+      setTimeout(()=>{ document.getElementById('storyBanner').style.transform = 'translateY(0)'; }, 10);
+      // Audio controls (English only for now)
+      if (slide.audio && slide.audio.en) {
+        if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+        const audio = new Audio(slide.audio.en);
+        audio.preload = 'auto';
+        audio.volume = 1;
+        currentAudio = audio;
+        // Controls
+        const playBtn = document.getElementById('audioPlayPause');
+        const seekBar = document.getElementById('audioSeek');
+        const muteBtn = document.getElementById('audioMute');
+        const volBar = document.getElementById('audioVolume');
+        playBtn.textContent = '▶️';
+        playBtn.onclick = () => { if (audio.paused) { audio.play(); } else { audio.pause(); } };
+        audio.onplay = () => { playBtn.textContent = '⏸️'; };
+        audio.onpause = () => { playBtn.textContent = '▶️'; };
+        audio.onended = () => { playBtn.textContent = '▶️'; };
+        audio.ontimeupdate = () => { seekBar.value = (audio.currentTime / audio.duration) * 100 || 0; };
+        seekBar.oninput = () => { audio.currentTime = (seekBar.value / 100) * audio.duration; };
+        volBar.value = audio.volume;
+        volBar.oninput = () => { audio.volume = volBar.value; };
+        muteBtn.onclick = () => { audio.muted = !audio.muted; muteBtn.textContent = audio.muted ? '🔇' : '🔊'; };
+      }
+      // Fullscreen thumbnail
+      thumb.onclick = () => {
+        document.getElementById('thumbModalImg').src = slide.image || '';
+        document.getElementById('thumbModal').style.display = 'flex';
+      };
+    }
+    // Banner exit
+    document.getElementById('bannerClose').onclick = () => {
+      document.getElementById('storyBanner').style.transform = '';
+      setTimeout(()=>{ document.getElementById('storyBanner').style.display = 'none'; }, 200);
+      if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+      highlightHotspot(null);
+    };
+    // Fullscreen modal exit
+    document.getElementById('thumbModalClose').onclick = () => { document.getElementById('thumbModal').style.display = 'none'; };
+    document.querySelector('.thumb-modal-bg').onclick = () => { document.getElementById('thumbModal').style.display = 'none'; };
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { document.getElementById('thumbModal').style.display = 'none'; } });
+    // On page load, setup model and hotspots
+    setupModelAndHotspots();
+  </script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Yatri AR - Heritage Explorer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Experience Indian heritage sites in AR. View models, listen to narration, and download offline packs.">
+  <link rel="stylesheet" href="mobile-ar.css">
+  <!-- Model Viewer Library -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+</head>
+<body>
+  <div class="container" style="background:linear-gradient(135deg,#fffbe7 0%,#ffe082 100%);min-height:100vh;padding-bottom:32px;">
+    <header style="width:100%;background:#ffd600;padding:18px 0 12px 0;box-shadow:0 2px 12px #ffd60033;margin-bottom:18px;border-radius:0 0 24px 24px;">
+      <h1 style="font-family:'Georgia',serif;font-size:2.1rem;text-align:center;color:#7c5c00;letter-spacing:1px;margin:0;">Yatri AR Heritage Explorer</h1>
+      <div style="text-align:center;color:#b8860b;font-size:1.08rem;margin-top:4px;">Experience India's iconic monuments in Augmented Reality</div>
+    </header>
+    <!-- Model Cards -->
+    <div id="modelCards" style="display:flex;flex-wrap:wrap;gap:24px;justify-content:center;max-width:900px;margin:0 auto 24px auto;">
+      <!-- India Gate Card -->
+      <div class="model-card" style="background:#fffbe7;border-radius:18px;box-shadow:0 2px 16px #ffd60033;padding:18px 16px 16px 16px;max-width:320px;flex:1 1 320px;display:flex;flex-direction:column;align-items:center;">
+        <div class="model-desc" style="font-size:1.08rem;color:#7c5c00;font-family:'Georgia',serif;margin-bottom:8px;text-align:center;">India Gate is a war memorial located in New Delhi, India. Explore its AR model below.</div>
+        <model-viewer src="https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/sign/heritage_assets/india_gate_nobg.glb?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV82NzUzYzI4Yi05MzU1LTQyOTgtYTY0NS0zZDRlMzE4NTU2MGUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJoZXJpdGFnZV9hc3NldHMvaW5kaWFfZ2F0ZV9ub2JnLmdsYiIsImlhdCI6MTc1ODU1MzI2MiwiZXhwIjoxNzkwMDg5MjYyfQ.NLYlBfdsYKA7GAQlQc7eCmmk8VCeKoFj6JA7qLTyaM0"
+          alt="India Gate AR Model" camera-controls auto-rotate style="width:100%;height:220px;background:transparent;border-radius:12px;box-shadow:0 2px 12px #ffd60044;" draco-decoder-path="https://www.gstatic.com/draco/versioned/decoders/1.4.3/">
+        </model-viewer>
+        <a href="models/indiagate.html" class="ar-link"><button style="margin-top:12px;background:#ffd600;color:#7c5c00;font-weight:600;border:none;border-radius:8px;padding:10px 22px;font-size:1.08rem;box-shadow:0 2px 8px #ffd60033;cursor:pointer;">View India Gate in AR</button></a>
+      </div>
+      <!-- Charminar Card -->
+      <div class="model-card" style="background:#fffbe7;border-radius:18px;box-shadow:0 2px 16px #ffd60033;padding:18px 16px 16px 16px;max-width:320px;flex:1 1 320px;display:flex;flex-direction:column;align-items:center;">
+        <div class="model-desc" style="font-size:1.08rem;color:#7c5c00;font-family:'Georgia',serif;margin-bottom:8px;text-align:center;">Charminar is a historic monument in Hyderabad, India. Explore its AR model below.</div>
+        <model-viewer src="https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/public/heritage_assets/charminar_hyderabad.glb"
+          ios-src="https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/public/heritage_assets/Charminar_Hyderabad.usdz"
+          alt="Charminar AR Model" camera-controls auto-rotate ar ar-modes="webxr quick-look scene-viewer" style="width:100%;height:220px;background:transparent;border-radius:12px;box-shadow:0 2px 12px #ffd60044;" draco-decoder-path="https://www.gstatic.com/draco/versioned/decoders/1.4.3/">
+        </model-viewer>
+        <a href="ar-view.html?model=charminar" class="ar-link"><button style="margin-top:12px;background:#ffd600;color:#7c5c00;font-weight:600;border:none;border-radius:8px;padding:10px 22px;font-size:1.08rem;box-shadow:0 2px 8px #ffd60033;cursor:pointer;">View Charminar in AR</button></a>
+      </div>
+      <!-- Sanchi Stupa Card -->
+      <div class="model-card" style="background:#fffbe7;border-radius:18px;box-shadow:0 2px 16px #ffd60033;padding:18px 16px 16px 16px;max-width:320px;flex:1 1 320px;display:flex;flex-direction:column;align-items:center;">
+        <div class="model-desc" style="font-size:1.08rem;color:#7c5c00;font-family:'Georgia',serif;margin-bottom:8px;text-align:center;">The Great Stupa at Sanchi is one of the oldest stone structures in India. View its AR model below.</div>
+        <model-viewer src="https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/public/heritage_assets/great_stupa_in_sanchi.glb"
+          ios-src="https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/public/heritage_assets/Great_Stupa_in_Sanchi.usdz"
+          alt="Sanchi Stupa AR Model" camera-controls auto-rotate ar ar-modes="webxr quick-look scene-viewer" style="width:100%;height:220px;background:transparent;border-radius:12px;box-shadow:0 2px 12px #ffd60044;" draco-decoder-path="https://www.gstatic.com/draco/versioned/decoders/1.4.3/">
+        </model-viewer>
+        <a href="models/sanchi_stupa.html" class="ar-link"><button style="margin-top:12px;background:#ffd600;color:#7c5c00;font-weight:600;border:none;border-radius:8px;padding:10px 22px;font-size:1.08rem;box-shadow:0 2px 8px #ffd60033;cursor:pointer;">View Sanchi Stupa in AR</button></a>
+      </div>
+      <!-- Ellora Caves Card -->
+      <div class="model-card" style="background:#fffbe7;border-radius:18px;box-shadow:0 2px 16px #ffd60033;padding:18px 16px 16px 16px;max-width:320px;flex:1 1 320px;display:flex;flex-direction:column;align-items:center;">
+        <div class="model-desc" style="font-size:1.08rem;color:#7c5c00;font-family:'Georgia',serif;margin-bottom:8px;text-align:center;">Ellora Caves is a UNESCO World Heritage site in Maharashtra, India. Explore its AR model below.</div>
+        <model-viewer src="https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/public/heritage_assets/ellora_caves__india.glb"
+          ios-src="https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/public/heritage_assets/Ellora_Caves__India.usdz"
+          alt="Ellora Caves AR Model" camera-controls auto-rotate ar ar-modes="webxr quick-look scene-viewer" style="width:100%;height:220px;background:transparent;border-radius:12px;box-shadow:0 2px 12px #ffd60044;" draco-decoder-path="https://www.gstatic.com/draco/versioned/decoders/1.4.3/">
+        </model-viewer>
+        <a href="models/ellora_caves.html" class="ar-link"><button style="margin-top:12px;background:#ffd600;color:#7c5c00;font-weight:600;border:none;border-radius:8px;padding:10px 22px;font-size:1.08rem;box-shadow:0 2px 8px #ffd60033;cursor:pointer;">View Ellora Caves in AR</button></a>
+      </div>
+    </div>
+    <footer style="width:100%;background:#ffd600;padding:14px 0 10px 0;box-shadow:0 -2px 12px #ffd60033;margin-top:32px;border-radius:24px 24px 0 0;text-align:center;color:#7c5c00;font-size:1.05rem;letter-spacing:0.5px;">
+      Made with ❤️ for Indian Heritage | © 2025 Yatri AR
+    </footer>
+    <!-- AR Fullscreen View (for demo, can be enhanced for WebXR/Quick Look) -->
+    <div id="arFullView" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:#000; z-index:9999; flex-direction:column; justify-content:center; align-items:center;">
+      <button id="backBtn" style="position:absolute; top:16px; left:16px; background:#fff; color:#007bff; border:none; border-radius:6px; padding:10px 18px; font-size:1rem; font-weight:500;">← Back</button>
+      <div id="arFullContent" style="width:100vw; height:100vh; display:flex; justify-content:center; align-items:center;"></div>
+    </div>
+  </div>
+  <script>
+    // Lightweight AR view logic for each model
+    function openAR(modelKey) {
+      // Show AR fullscreen view
+      document.querySelector('.container').style.display = 'none';
+      document.getElementById('arFullView').style.display = 'flex';
+      // Get model URL and description
+      let modelUrl = '';
+      let modelDesc = '';
+      if (modelKey === 'indiagate') {
+        modelUrl = 'https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/sign/heritage_assets/india_gate_nobg.glb';
+        modelDesc = 'India Gate AR Model';
+      } else if (modelKey === 'pandal') {
+        modelUrl = 'https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/sign/heritage_assets/pandal_without_bg.glb';
+        modelDesc = 'Pandal AR Model';
+      } else if (modelKey === 'rath') {
+        modelUrl = 'https://kcpcvsfumkeinsxfkfru.supabase.co/storage/v1/object/sign/heritage_assets/rath_nobg.glb';
+        modelDesc = 'Rath AR Model';
+      }
+      // Render model-viewer in fullscreen with AR enabled
+      document.getElementById('arFullContent').innerHTML = `
+        <model-viewer src="${modelUrl}" alt="${modelDesc}" camera-controls auto-rotate ar ar-modes="webxr quick-look scene-viewer" ios-src="${modelUrl}" style="width:90vw;height:70vh;background:transparent;" draco-decoder-path="https://www.gstatic.com/draco/versioned/decoders/1.4.3/"></model-viewer>
+      `;
+    }
+    document.getElementById('backBtn').addEventListener('click', function() {
+      document.getElementById('arFullView').style.display = 'none';
+      document.querySelector('.container').style.display = 'block';
+      document.getElementById('arFullContent').innerHTML = '';
+    });
+
+    document.getElementById('playNarrationBtn').addEventListener('click', function() {
+      alert('Playing narration...');
+    });
+    document.getElementById('playMusicBtn').addEventListener('click', function() {
+      alert('Playing background music...');
+    });
+    document.getElementById('downloadPackBtn').addEventListener('click', function() {
+      alert('Downloading offline pack...');
+    });
+    document.querySelectorAll('.lang-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        document.getElementById('infoText').textContent = 'Informative text for selected site (' + this.textContent + ')';
+      });
+    });
+  </script>
+</body>
+</html>
