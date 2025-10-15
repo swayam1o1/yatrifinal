@@ -88,7 +88,7 @@ Please ensure code follows best practices for accessibility and mobile responsiv
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE]([LICENSE](https://github.com/swayam1o1/yatrifinal/blob/main/LICENSE)) file for details.
 
 ## Acknowledgments
 
