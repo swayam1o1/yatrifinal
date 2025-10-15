@@ -99,7 +99,7 @@ This project is licensed under the MIT License. See the [LICENSE]([LICENSE](http
 
 ## Contact
 
-For questions or feedback, reach out to [your-email@example.com] or open an issue on GitHub.
+For questions or feedback, reach out to swayam.narayanan2005@gmail.com or open an issue on GitHub.
 
 ---
 
