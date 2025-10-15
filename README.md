@@ -14,9 +14,6 @@ Yatri AR is a web-based Augmented Reality (AR) application designed to bring Ind
   - Charminar (Hyderabad)
   - Sanchi Stupa (Madhya Pradesh)
   - Ellora Caves (Maharashtra)
-  - Konark Sun Temple (Odisha)
-  - Pandal (Festival Structure)
-  - Rath (Ceremonial Chariot)
 
 ## Technologies Used
 
@@ -71,10 +68,7 @@ yatri-ar-heritage-explorer/
 │   ├── indiagate.html      # India Gate detailed AR page
 │   ├── charminar.html      # Charminar detailed AR page
 │   ├── sanchi_stupa.html   # Sanchi Stupa detailed AR page
-│   ├── ellora_caves.html   # Ellora Caves detailed AR page
-│   ├── konark_sun_temple.html  # Konark Sun Temple detailed AR page
-│   ├── pandal.html         # Pandal detailed AR page
-│   └── rath.html           # Rath detailed AR page
+│   └── ellora_caves.html   # Ellora Caves detailed AR page
 ├── css/                    # Additional styles (if any)
 │   └── mobile-ar.css       # Duplicate or extended styles
 ├── LICENSE                 # MIT License file
@@ -105,7 +99,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-For questions or feedback, reach out to swayam.narayanan2005@gmail.com or open an issue on GitHub.
+For questions or feedback, reach out to [your-email@example.com] or open an issue on GitHub.
 
 ---
 
